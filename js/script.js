@@ -142,10 +142,10 @@ removeElement()
     
     //定义省份城市
     if ($this.prov != null) {
-      var provhtml = $('<a class="item-prov item-lbox arrow" href="#">' + $this.prov + '</a>');
+      var provhtml = $('<a class="item-prov item-lbox arrow" data-prov="' + $this.prov + '" href="#">' + $this.prov + '</a>');
       $('#address').empty().append(provhtml);
       if ($this.city != null) {
-        var cityhtml = $('<span class="sp1">></span><a class="item-city item-lbox arrow" href="#">' + $this.city + '</a>');
+        var cityhtml = $('<span class="sp1">></span><a data-city="' + $this.city + '" class="item-city item-lbox arrow" href="#">' + $this.city + '</a>');
         $('#address').append(cityhtml);
       }else {
         $('#address').find('.item-city').remove();
@@ -157,10 +157,10 @@ removeElement()
 
     //定义类别产品
     if ($this.cate != null) {
-      var catehtml = $('<a class="item-cate item-lbox arrow" href="#">' + $this.cate + '</a>');
+      var catehtml = $('<a class="item-cate item-lbox arrow" data-cate="' + $this.cate + '" href="#">' + $this.cate + '</a>');
       $('#product').empty().append(catehtml);
       if ($this.cateitem != null) {
-        var cateitemhtml = $('<span class="sp1">></span><a class="item-cateitem item-lbox arrow" href="#">' + $this.cateitem + '</a>');
+        var cateitemhtml = $('<span class="sp1">></span><a data-cateitem="' + $this.cateitem + '" class="item-cateitem item-lbox arrow" href="#">' + $this.cateitem + '</a>');
         $('#product').append(cateitemhtml);
       }else {
         $('#product').find('.item-cateitem').remove();
@@ -177,6 +177,11 @@ removeElement()
         $('.adress-list').empty().append(data);
       });
     }
+    
+    $('.step-city .prov-name').html('(' + $this.prov + ')');
+    $('.step-cateitem .item-cate').html('(' + $this.cate + ')');
+
+    
 
   }
 
@@ -214,7 +219,7 @@ removeElement()
       showStep1.goto(obj,dir);
     })      
 
-    //中心页        
+    //step1中心页        
     $('.map-nav').on('click','.step-search .item-chooseadress',function  () {
       var getUrl = $(this).data('ajaxurl');
       ajaxLoad(getUrl,function  (data) {
@@ -228,6 +233,42 @@ removeElement()
       ajaxLoad(getUrl,function  (data) {
         $('.step-cate .control-list').empty().append(data);
         showStep1.goto($('.step-cate'),'left');
+      });      
+    })
+
+      //省份链
+    $('.map-nav').on('click','.step-search .item-prov',function  () {
+      var getUrl = 'ajax/prov.html';
+      ajaxLoad(getUrl,function  (data) {
+        $('.step-prov .control-list').empty().append(data);
+        showStep1.goto($('.step-prov'),'left');
+      });      
+    })
+
+    $('.map-nav').on('click','.step-search .item-city',function  () {
+      var getUrl = 'ajax/city.html?q=' + showStep1.city;
+      ajaxLoad(getUrl,function  (data) {
+        $('.step-city .control-list').empty().append(data);
+        showStep1.goto($('.step-city'),'left');
+        showStep1.goto($('.step-prov'),'left');
+      });      
+    })
+    
+      //产品链
+    $('.map-nav').on('click','.step-search .item-cate',function  () {
+      var getUrl = 'ajax/cate.html';
+      ajaxLoad(getUrl,function  (data) {
+        $('.step-cate .control-list').empty().append(data);
+        showStep1.goto($('.step-cate'),'left');
+      });      
+    })
+
+    $('.map-nav').on('click','.step-search .item-cateitem',function  () {
+      var getUrl = 'ajax/cateitem.html?q=' + showStep1.cateitem;
+      ajaxLoad(getUrl,function  (data) {
+        $('.step-cateitem .control-list').empty().append(data);
+        showStep1.goto($('.step-cate'),'left');
+        showStep1.goto($('.step-cateitem'),'left');
       });      
     })
       
