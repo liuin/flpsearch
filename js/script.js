@@ -78,22 +78,37 @@ removeElement()
   var selectString = '[showStep]';
 
   function showStep(obj,dir,sweept) {
-    this.obj = obj;
-    this.sweept = sweept;
-    if (dir == 'left') { 
-      this.showIn();
+    this.obj = obj || null;
+    this.sweept = sweept || null;
+    this.dir = dir || null;
+    this.prov = null;
+    this.city = null;
+    this.cate = null;
+    this.cateitem = null;
+  }
+
+  //加载
+  showStep.prototype.goto = function  (obj,dir) {
+    var $this = this;
+    $this.obj = obj || $this.obj;
+    $this.dir = dir || $this.dir;
+    if ($this.dir == 'left' ) {
+      $this.showIn();
     }
-    if (dir == 'right') {
-      this.showOut();
+
+    if ($this.dir == 'right') {
+      $this.showOut();
     }
   }
 
+  //移进
   showStep.prototype.showIn = function  () {
     var $this = this;
     if ($.support.transition) {
-      $this.obj.addClass('in');
       $this.obj.show();
       $this.obj[0].offsetWidth;
+
+      $this.obj.addClass('in');
 
       $this.obj.one('bsTransitionEnd',function  () {
         $this.obj.trigger('showIn');
@@ -104,20 +119,17 @@ removeElement()
       $this.obj.css('left','0');
       $this.obj.show();      
       $this.obj.trigger('showIn');
-    }
-
-    
+    }  
   }
 
+  //移出
   showStep.prototype.showOut = function  () {
     var $this = this;
-
     if ($.support.transition) {
       $this.obj.removeClass('in');
       $this.obj.one('bsTransitionEnd',function  () {
         $this.obj.hide();
         $this.obj.trigger('showOut');
-        $this.obj.trigger('showIn');
       }).emulateTransitionEnd(300);
     }else {
       $this.obj.css('left','0');
@@ -125,15 +137,154 @@ removeElement()
     }
   }
 
-  var showStep1 =  new showStep(getObj,'left');
-
-  $(selectString).each(function () {
-    var getObj = $('.'+$(this).attr('showstep'));
+  showStep.prototype.resetmsg = function  () {
+    var $this = this;
     
-    $(this).on('click',function  () {
+    //定义省份城市
+    if ($this.prov != null) {
+      var provhtml = $('<a class="item-prov item-lbox arrow" href="#">' + $this.prov + '</a>');
+      $('#address').empty().append(provhtml);
+      if ($this.city != null) {
+        var cityhtml = $('<span class="sp1">></span><a class="item-city item-lbox arrow" href="#">' + $this.city + '</a>');
+        $('#address').append(cityhtml);
+      }else {
+        $('#address').find('.item-city').remove();
+      }
+    }else {
+      var defhtml = $('<a class="item-chooseadress item arrow-right" data-ajaxurl="ajax/prov.html" href="#">请选择您的所在地</a>');
+      $('#address').empty().append(defhtml);
+    }
+
+    //定义类别产品
+    if ($this.cate != null) {
+      var catehtml = $('<a class="item-cate item-lbox arrow" href="#">' + $this.cate + '</a>');
+      $('#product').empty().append(catehtml);
+      if ($this.cateitem != null) {
+        var cateitemhtml = $('<span class="sp1">></span><a class="item-cateitem item-lbox arrow" href="#">' + $this.cateitem + '</a>');
+        $('#product').append(cateitemhtml);
+      }else {
+        $('#product').find('.item-cateitem').remove();
+      }
+    }else {
+      var defhtml = $('<a class="item-choosepro item arrow-right" data-ajaxurl="ajax/cate.html" href="#">请选择产品</a>');
+      $('#product').empty().append(defhtml);
+    }
+
+    //搜索列表
+    if ($this.cate != null && $this.cateitem != null && $this.prov != null && $this.city != null) {
+      var getUrl = 'ajax/adress.html?a='+ $this.prov +'&b='+  $this.city + '&c=' + $this.cate + '&d=' + $this.cateitem;
+      ajaxLoad(getUrl,function  (data) {
+        $('.adress-list').empty().append(data);
+      });
+    }
+
+  }
+
+
+
+
+  function ajaxLoad(url,callback) {
+    $.ajax({
+        type: "post",
+        url: url,
+        success: function(data){
+          $('#loading').hide();
+          if (callback) {
+            callback(data);
+          }
+        },
+        error:function  () {
+          
+        },
+        beforeSend:function  () {
+          $('#loading').show();
+        }
+    });
+  }
+
+
+
+  $(document).ready(function() {
+    var showStep1 =  new showStep();
+
+
+    $('.map-nav').on('click',selectString,function  () {
+      var obj = $('.' + $(this).attr('showstep'));
+      var dir = $(this).attr('showdir');
+      showStep1.goto(obj,dir);
+    })      
+
+    //中心页        
+    $('.map-nav').on('click','.step-search .item-chooseadress',function  () {
+      var getUrl = $(this).data('ajaxurl');
+      ajaxLoad(getUrl,function  (data) {
+        $('.step-prov .control-list').empty().append(data);
+        showStep1.goto($('.step-prov'),'left');
+      });            
+    })
+
+    $('.map-nav').on('click','.step-search .item-choosepro',function  () {
+      var getUrl = $(this).data('ajaxurl');
+      ajaxLoad(getUrl,function  (data) {
+        $('.step-cate .control-list').empty().append(data);
+        showStep1.goto($('.step-cate'),'left');
+      });      
+    })
       
+
+    //省份
+    $('.map-nav').on('click','.step-prov .item',function  () {
+      var prov = $(this).data('prov');            
+      showStep1.prov = prov;
+      showStep1.resetmsg();
+
+      var ajaxurl = 'ajax/city.html?q=' + $(this).data('prov');
+
+      ajaxLoad(ajaxurl,function  (data) {
+        $('.step-city .control-list').empty().append(data);
+        showStep1.goto($('.step-city'),'left');              
+      });
+    })
+
+    //城市
+    $('.map-nav').on('click','.step-city .item',function  () {
+      var city = $(this).data('city');
+      showStep1.city = city;
+      showStep1.resetmsg();
+      //回到最初页
+      showStep1.goto($('.step-prov'),'right');      
+      showStep1.goto($('.step-city'),'right');      
+    })
+
+    //产品类型
+    $('.map-nav').on('click','.step-cate .item',function  () {
+      var cate = $(this).data('cate');
+      showStep1.cate = cate;
+      showStep1.resetmsg();
+      
+      var ajaxurl = 'ajax/cateitem.html?q=' + $(this).data('cate');
+
+      ajaxLoad(ajaxurl,function  (data) {
+        $('.step-cateitem .control-list').empty().append(data);        
+        showStep1.goto($('.step-cateitem'),'left');        
+      })
+
+
+    })
+
+    //产品名称
+    $('.map-nav').on('click','.step-cateitem .item',function  () {
+      var cateitem = $(this).data('cateitem');
+      showStep1.cateitem = cateitem;
+      showStep1.resetmsg();
+      showStep1.goto($('.step-cate'),'right');
+      showStep1.goto($('.step-cateitem'),'right');
     })
   })
+
+
+  
+
 
 
 })(jQuery);

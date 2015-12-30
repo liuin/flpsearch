@@ -38,112 +38,47 @@
       <div id="map">      
       </div>
       <div class="map-nav">
-        <div class="step1 step"> 
+        <div class="step1 step-search step"> 
           <h2 class="hd">查找服务中心</h2>
           <ul class="control-list">
-            <li>
-              <a id="address" showstep="step-prov" class="item arrow-right" href="#">请选择您的所在地</a>
+            <li id="address">
+              <a class="item-chooseadress item arrow-right" data-ajaxurl="ajax/prov.html" href="#">请选择您的所在地</a>
             </li>
-            <li>
-              <a id="product" class="item arrow-right" href="#">请选择产品</a>
+            <li id="product">
+              <a class="item-choosepro item arrow-right" data-ajaxurl="ajax/cate.html" href="#">请选择产品</a>
             </li>
           </ul>
 
           <ul class="adress-list">
-            <li>
-              <a href="#">
-                <i>1</i>
-                <p class="adress">广州天河珠江新城</p>
-                <p class="tel">021-62775400</p>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <i>1</i>
-                <p class="adress">广州天河珠江新城</p>
-                <p class="tel">021-62775400</p>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <i>1</i>
-                <p class="adress">广州天河珠江新城</p>
-                <p class="tel">021-62775400</p>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <i>1</i>
-                <p class="adress">广州天河珠江新城</p>
-                <p class="tel">021-62775400</p>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <i>1</i>
-                <p class="adress">广州天河珠江新城</p>
-                <p class="tel">021-62775400</p>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <i>1</i>
-                <p class="adress">广州天河珠江新城</p>
-                <p class="tel">021-62775400</p>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <i>1</i>
-                <p class="adress">广州天河珠江新城</p>
-                <p class="tel">021-62775400</p>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <i>1</i>
-                <p class="adress">广州天河珠江新城</p>
-                <p class="tel">021-62775400</p>
-              </a>
-            </li>
 
           </ul> 
 
         </div><!-- /step1 -->
-        <div class="step2 step-prov  step">
-          <h2 class="hd">省份 <a href="#" class="arrow-left"><span class="none">返回</span></a></h2>
+        <div class="step2 step-prov none step">
+          <h2 class="hd">省份 <a href="#" showstep="step-prov" showdir="right" class="arrow-left "><span class="none">返回</span></a></h2>
           <ul class="control-list">
-            <li>
-              <a class="item arrow-right" href="#">江苏省</a>
-            </li>
-            <li>
-              <a class="item arrow-right" href="#">江苏省</a>
-            </li>
-            <li>
-              <a class="item arrow-right" href="#">江苏省</a>
-            </li>          
           </ul>
         </div><!-- /step2 -->
       
-        <div class="step3 city step none">
-          <h2 class="hd"><span class="prov-name">(江苏省)</span>城市 <a href="#" class="arrow-left"><span class="none">返回</span></a></h2>
+        <div class="step3 step-city step none">
+          <h2 class="hd"><span class="prov-name">(江苏省)</span>城市 <a href="#" showstep="step-city" showdir="right" class="arrow-left"><span class="none">返回</span></a></h2>
           <ul class="control-list">
             <li>
-              <a class="item" href="#">南京</a>
+              <a class="item"  href="#">南京</a>
             </li>
             <li>
-              <a class="item" href="#">泰州</a>
+              <a class="item"  href="#">泰州</a>
             </li>
             <li>
-              <a class="item" href="#">徐州</a>
+              <a class="item"  href="#">徐州</a>
             </li>          
           </ul>
         </div><!-- /step3 -->
       
-        <div class="step4 procate step none">
-          <h2 class="hd">产品类型<a href="#" class="arrow-left"><span class="none">返回</span></a></h2>
+        <div class="step4 step-cate step none">
+          <h2 class="hd">产品类型<a href="#" showstep="step-cate" showdir="right" class="arrow-left"><span class="none">返回</span></a></h2>
           <ul class="control-list">
-            <li>
+            <!-- <li>
               <a class="item arrow-right" href="#">个人护理</a>
             </li>
             <li>
@@ -151,27 +86,30 @@
             </li>
             <li>
               <a class="item arrow-right" href="#">厨房产品</a>
-            </li>
+            </li> -->
           </ul>
         </div><!-- /step4 -->
       
-        <div class="step5 product step none">
-          <h2 class="hd"><span class="item-cate">(个人护理)</span>产品名称 <a href="#" class="arrow-left"><span class="none">返回</span></a></h2>
+        <div class="step5 step-cateitem step none">
+          <h2 class="hd"><span class="item-cate">(个人护理)</span>产品名称 <a showstep="step-pro" showdir="right" href="#" class="arrow-left"><span class="none">返回</span></a></h2>
           <ul class="control-list">
-            <li>
-              <a class="item arrow-right" href="#">个人护理</a>
+            <!-- <li>
+              <a class="item" href="#">电视</a>
             </li>
             <li>
-              <a class="item arrow-right" href="#">厨房产品</a>
+              <a class="item" href="#">数码照相机1</a>
             </li>
             <li>
-              <a class="item arrow-right" href="#">厨房产品</a>
-            </li>
+              <a class="item" href="#">数码照相机2</a>
+            </li> -->
           </ul>
         </div><!-- /step5 -->
       </div>
     </div>
-  </div><!-- /container-map -->
+  </div><!-- /container-map -->  
+  <div id="loading">
+    <span><img src="images/loading.gif" alt="加载中..."></span>
+  </div><!-- /loading -->
 
   
 
