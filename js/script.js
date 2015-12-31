@@ -85,6 +85,35 @@ removeElement()
     this.city = null;
     this.cate = null;
     this.cateitem = null;
+    this.map = new BMap.Map("map"); 
+    this.mymarkers = null;
+    this.mapPiont = null;
+
+    var $this = this;
+
+    //地图默认展示
+    //$this.map.centerAndZoom('中国',5);
+    
+    $this.map.centerAndZoom(new BMap.Point(116.319852,40.057031),16);
+    $this.map.addControl(new BMap.MapTypeControl());
+
+  
+    var searchInfoWindow1 = new BMapLib.SearchInfoWindow($this.map, "信息框1内容", {
+      title: "信息框1", //标题
+      panel : "panel", //检索结果面板
+      enableAutoPan : true, //自动平移
+      searchTypes :[
+        BMAPLIB_TAB_FROM_HERE, //从这里出发
+        BMAPLIB_TAB_SEARCH   //周边检索
+      ]
+    });
+    function openInfoWindow1() {     
+      searchInfoWindow1.open(new BMap.Point(116.319852,40.057031));
+    }
+
+    openInfoWindow1();
+
+
   }
 
   //加载
@@ -169,19 +198,94 @@ removeElement()
       var defhtml = $('<a class="item-choosepro item arrow-right" data-ajaxurl="ajax/cate.html" href="#">请选择产品</a>');
       $('#product').empty().append(defhtml);
     }
-
-    //搜索列表
-    if ($this.cate != null && $this.cateitem != null && $this.prov != null && $this.city != null) {
-      var getUrl = 'ajax/adress.html?a='+ $this.prov +'&b='+  $this.city + '&c=' + $this.cate + '&d=' + $this.cateitem;
-      ajaxLoad(getUrl,function  (data) {
-        $('.adress-list').empty().append(data);
-      });
-    }
     
     $('.step-city .prov-name').html('(' + $this.prov + ')');
     $('.step-cateitem .item-cate').html('(' + $this.cate + ')');
 
-    
+    //搜索列表
+    if ($this.cate != null && $this.cateitem != null && $this.prov != null && $this.city != null) {
+      var getUrl = 'ajax/adress.html?a='+ $this.prov +'&b='+  $this.city + '&c=' + $this.cate + '&d=' + $this.cateitem;
+
+      ajaxLoad(getUrl,function  (data) {
+        $('.adress-list').empty().append(data);
+        
+        var getObj = $(data).find('a');
+        var getMk = [];
+
+        getObj.each(function  (n) {
+          var adressobj = $(this);
+          var adress = $(this).data('adress');
+
+          var myGeo = new BMap.Geocoder();
+          myGeo.getPoint(adress, function(googlePoi){
+            if (googlePoi) {
+              var googleMkr = new BMap.Marker(googlePoi);
+              googleMkr.msg =
+              {
+                adress:adress,
+                tel:adressobj.find('.tel')
+              }
+
+              getMk[n] = googleMkr;
+
+              //$this.mymarkers.push(googleMkr);
+              /*
+              (function(i){
+                googleMkr.addEventListener('mouseover', function(){
+                var info = infomsg(item);
+                var infoWin = new BMap.InfoWindow(info, {title:item.fwdname});
+                this.openInfoWindow(infoWin);
+              });
+              })(i);
+              */
+              $this.map.addOverlay(googleMkr);
+              
+              if ($this.mapPiont != null) {
+                $this.map.centerAndZoom($this.mapPiont, 11);
+              }else {
+                $this.map.centerAndZoom($this.prov, 11);
+              }
+
+              if (n == (getObj.length-1)) {
+                $this.mapPiont = getMk;
+                console.log(getMk);
+              }              
+            }
+          }, $this.city);
+          
+          
+
+        })
+
+
+        
+
+
+      });
+
+      return
+    }
+
+
+    if ($this.prov != null && $this.city == null) {
+      $this.map.centerAndZoom($this.prov,9);
+      return
+    }
+    if ($this.prov != null && $this.city != null) {
+      // 创建地址解析器实例
+      var myGeo = new BMap.Geocoder();
+      // 将地址解析结果显示在地图上,并调整地图视野
+      myGeo.getPoint($this.prov + $this.city, function(point){
+        if (point) {
+          $this.mapPiont = point;
+          $this.map.centerAndZoom(point, 13);
+        }else{
+          alert("您选择地址没有解析到结果!");
+        }
+      });
+      return
+    }
+
 
   }
 
@@ -277,6 +381,7 @@ removeElement()
     $('.map-nav').on('click','.step-prov .item',function  () {
       var prov = $(this).data('prov');            
       showStep1.prov = prov;
+      showStep1.city = null;
       showStep1.resetmsg();
 
       var ajaxurl = 'ajax/city.html?q=' + $(this).data('prov');
@@ -290,6 +395,7 @@ removeElement()
     //城市
     $('.map-nav').on('click','.step-city .item',function  () {
       var city = $(this).data('city');
+      
       showStep1.city = city;
       showStep1.resetmsg();
       //回到最初页
@@ -309,8 +415,6 @@ removeElement()
         $('.step-cateitem .control-list').empty().append(data);        
         showStep1.goto($('.step-cateitem'),'left');        
       })
-
-
     })
 
     //产品名称
@@ -321,9 +425,13 @@ removeElement()
       showStep1.goto($('.step-cate'),'right');
       showStep1.goto($('.step-cateitem'),'right');
     })
+
+
+
   })
 
 
+  
   
 
 

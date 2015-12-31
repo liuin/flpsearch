@@ -9,6 +9,11 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css" />
+  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=P8gyrSp3GWLZHWSzcfHn1eRe"></script>
+  <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
+
+
   <!--[if lt IE 9]>
     <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
@@ -35,7 +40,9 @@
 
   <div class="container container-map">
     <div class="row">
-      <div id="map">      
+      <div class="map-box">
+        <div id="map">      
+        </div>
       </div>
       <div class="map-nav">
         <div class="step1 step-search step"> 
