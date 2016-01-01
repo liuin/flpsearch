@@ -7,11 +7,11 @@
   <meta name="description" content="">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css" />
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css" />
   <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=P8gyrSp3GWLZHWSzcfHn1eRe"></script>
-  <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
+  <script type="text/javascript" src="js/searchlib.js"></script>
 
 
   <!--[if lt IE 9]>
@@ -47,7 +47,7 @@
       <div class="map-nav">
         <div class="step1 step-search step"> 
           <h2 class="hd">查找服务中心</h2>
-          <ul class="control-list">
+          <ul class="control-list-break">
             <li id="address">
               <a class="item-chooseadress item arrow-right" data-ajaxurl="ajax/prov.html" href="#">请选择您的所在地</a>
             </li>
@@ -118,6 +118,24 @@
     <span><img src="images/loading.gif" alt="加载中..."></span>
   </div><!-- /loading -->
 
+
+  <div id="send-msg">
+    <form method="post" action="">
+        <h3>发送到手机</h3>
+        <div class="form-ground form-ground-tel">
+          <input type="text" name="tel" class="tel" placeholder="请输入手机号码" />
+        </div>
+        <div class="form-ground form-ground-tbutton">
+          <button type="submit">
+            发送
+          </button>
+        </div>
+        <div class="form-ground form-ground-ck">
+          <label><input type="checkbox" name="" id="" />我同意来自飞利浦的咨询</label>
+        </div>
+    </form>  
+    <a href="javascript:void(0);" class="close"></a>
+  </div>
   
 
   <script type="text/javascript" src="js/jquery.js"></script>

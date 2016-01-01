@@ -7,8 +7,8 @@ a,a:focus {text-decoration:none; outline:0;}
 /*-- container-header --*/
 .container-header {height: 60px; position: absolute;top: 0;left: 0;width: 100%; background:#082774; z-index: 10; }
 
-.logo {margin-left: 30px;margin-top: 22px; visibility:hidden;}
-.menu {font-size: 16px; margin-top: 18px; visibility:hidden;}
+.logo {margin-left: 30px;margin-top: 22px; }
+.menu {font-size: 16px; margin-top: 22px; }
 .menu li{float: left; margin-left: 60px;}
 .menu li a {color: #fff;}
 
@@ -24,8 +24,12 @@ a,a:focus {text-decoration:none; outline:0;}
 .map-nav .arrow-right {background:url("../images/arrow-right.png") 300px center no-repeat;}
 .map-nav .arrow-left {background: url("../images/arrow-left.png") 4px center no-repeat;position: absolute;left: 20px;width: 20px;height: 20px;top: 16px;}
 
-.control-list {background:#fff;}
+.control-list {background:#fff; overflow: auto;}
 .control-list li a {display:block;border-bottom: 1px solid #e8e8e8; height: 50px; padding-left: 20px;padding-right: 20px; line-height: 50px;}
+
+.control-list-break {background:#fff; overflow: auto;}
+.control-list-break li a {display:block;border-bottom: 1px solid #e8e8e8; height: 50px; padding-left: 20px;padding-right: 20px; line-height: 50px;}
+
 
 .container-map .step {position:absolute;width: 325px; left:325px;top: 0; -webkit-transition:0.5s; transition:0.5s; height: 100%;background: #f3f3f3;overflow: auto;}
 
@@ -33,11 +37,12 @@ a,a:focus {text-decoration:none; outline:0;}
 
 .container-map .step1 {position:static; width: 325px;}
 
-.control-list li a.item-lbox {display:inline-block;}
+.control-list-break li a.item-lbox {display:inline-block;}
 
 /*-- adress-list --*/
 .adress-list {margin: 10px;margin: 10px;height: 341px;overflow: auto;}
 .adress-list li {background:#fff; position:relative; border:1px solid #ececec;margin-bottom: 8px; padding: 10px; padding-left: 42px;}
+.adress-list li.current {background:#ddd;}
 .adress-list li i{background: url("../images/positon.png") 0 0 no-repeat;font-style: normal;width: 17px;display: block;position: absolute;height: 28px;color: #fff;text-align: center;left: 12px;top: 14px;}
 .adress-list li .adress {margin-bottom: 5px;}
 .map-nav .linkto {display:block;}
@@ -51,6 +56,35 @@ a,a:focus {text-decoration:none; outline:0;}
 #loading {background: transparent; position:fixed; top:0; left:0; right:0; bottom:0; width:100%; height:100%; display:none;}
 #loading span {position:absolute;top:50%; left:50%; display:inline-block;width:40px; height:40px; line-height:30px; text-align:center;border:1px solid #000; border-radius:5px; background:#000; margin-left:20px; margin-top:-20px; box-shadow: 0px 0px 3px #000;}
 #loading span img {position:relative; top:9px;}
+
+/*-- map --*/
+.BMapLib_SearchInfoWindow .BMapLib_bubble_close { height: 20px;width: 20px;margin-left: auto;margin-right: 4px; cursor: pointer;}
+.content-msg { font-size: 14px;line-height: 1.5;padding-left: 32px;}
+.content-msg i{background: url("../images/positon.png") 0 0 no-repeat;font-style: normal;width: 17px;display: block;position: absolute;height: 28px;color: #fff;text-align: center;left: 12px;top: 24px;}
+.content-msg .adress {margin-bottom: 0px; color: #666; }
+.content-msg .tel {margin-bottom: 0px; color: #666;}
+.content-msg .name {margin-bottom: 0px; font-weight:bold;}
+
+.BMapLib_SearchInfoWindow .BMapLib_nav {height: auto;}
+
+.BMapLib_bubble_bottom {text-align:center; padding-bottom: 10px; padding-top: 10px;}
+.BMapLib_bubble_bottom .send-tel{text-align:center;color: #666; font-size: 14px;}
+.BMapLib_trans_text {height: 30px; line-height: 30px;}
+
+.BMapLib_nav_tab_content li {height:auto;}
+
+.BMapLib_SearchInfoWindow .BMapLib_search_bus_btn0 { background: #082774;color: #fff;height: 32px;line-height: 32px;}
+.BMapLib_SearchInfoWindow .BMapLib_search_drive_btn0 { background: #082774;color: #fff;height: 32px;line-height: 32px;}
+
+#send-msg {width: 300px; position:absolute; top: 50%; left:50%; margin-left: -150px; background:#fff; border:1px solid #999; padding: 10px; font-size: 14px; display:none;}
+
+#send-msg h3 {text-align:center;margin-bottom: 10px;}
+#send-msg .form-ground {margin-bottom: 10px;}
+#send-msg .tel {width: 100%; border:1px solid #999; height: 30px;line-height: 30px; font-size: 14px; padding-left: 10px;padding-right: 10px; width: 277px;}
+#send-msg button {height: 30px; line-height: 30px; text-align:center;width: 100%;color: #fff;background:#082774; border:0;}
+#send-msg .form-ground-ck {font-size: 12px; color: #999;}
+#send-msg .form-ground-ck * {vertical-align:middle;}
+#send-msg .close {background:url("../images/iw_close.gif") 0 0 no-repeat; width: 10px; height: 10px;position: absolute;right: 10px;top: 10px;  }
 
 
 /*-- 滚动条 --*/

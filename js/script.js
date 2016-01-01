@@ -97,23 +97,18 @@ removeElement()
     $this.map.centerAndZoom(new BMap.Point(116.319852,40.057031),16);
     $this.map.addControl(new BMap.MapTypeControl());
 
-  
-    var searchInfoWindow1 = new BMapLib.SearchInfoWindow($this.map, "信息框1内容", {
-      title: "信息框1", //标题
-      panel : "panel", //检索结果面板
-      enableAutoPan : true, //自动平移
-      searchTypes :[
-        BMAPLIB_TAB_FROM_HERE, //从这里出发
-        BMAPLIB_TAB_SEARCH   //周边检索
-      ]
+    // 添加带有定位的导航控件
+    var navigationControl = new BMap.NavigationControl({
+      // 靠左上角位置
+      anchor: BMAP_ANCHOR_TOP_LEFT,
+      // LARGE类型
+      type: BMAP_NAVIGATION_CONTROL_LARGE,
+      // 启用显示定位
+      enableGeolocation: true
     });
-    function openInfoWindow1() {     
-      searchInfoWindow1.open(new BMap.Point(116.319852,40.057031));
-    }
+    $this.map.addControl(navigationControl);
 
-    openInfoWindow1();
-
-
+    
   }
 
   //加载
@@ -222,22 +217,18 @@ removeElement()
               var googleMkr = new BMap.Marker(googlePoi);
               googleMkr.msg =
               {
+                name:adressobj.find('.name').text(),
                 adress:adress,
-                tel:adressobj.find('.tel')
+                tel:adressobj.find('.tel').text()
               }
 
               getMk[n] = googleMkr;
 
-              //$this.mymarkers.push(googleMkr);
-              /*
-              (function(i){
-                googleMkr.addEventListener('mouseover', function(){
-                var info = infomsg(item);
-                var infoWin = new BMap.InfoWindow(info, {title:item.fwdname});
-                this.openInfoWindow(infoWin);
+              googleMkr.addEventListener('click', function(){
+                $('.adress-list li').eq(n).trigger('click');
               });
-              })(i);
-              */
+
+
               $this.map.addOverlay(googleMkr);
               
               if ($this.mapPiont != null) {
@@ -248,24 +239,18 @@ removeElement()
 
               if (n == (getObj.length-1)) {
                 $this.mapPiont = getMk;
-                console.log(getMk);
               }              
             }
           }, $this.city);
-          
-          
 
         })
-
-
-        
-
 
       });
 
       return
     }
 
+    $('.adress-list').empty();
 
     if ($this.prov != null && $this.city == null) {
       $this.map.centerAndZoom($this.prov,9);
@@ -315,7 +300,7 @@ removeElement()
 
   $(document).ready(function() {
     var showStep1 =  new showStep();
-
+    $.showStep1 = showStep1;
 
     $('.map-nav').on('click',selectString,function  () {
       var obj = $('.' + $(this).attr('showstep'));
@@ -426,20 +411,78 @@ removeElement()
       showStep1.goto($('.step-cateitem'),'right');
     })
 
+    
+    //关闭发送框
+    $('#send-msg .close').on('click',function  () {
+      $('#send-msg').hide();
+    })
 
+    //弹出信息
+
+    
+    
+    
+    function creatpop (string,mk,nb) {
+      var searchInfoWindow1 = new BMapLib.SearchInfoWindow(showStep1.map, string, {
+        title: "信息框1", //标题
+        panel : "panel", //检索结果面板
+        enableAutoPan : true, //自动平移,
+        width:300,
+        mkmsg:nb.toString(),
+        searchTypes :[
+          //BMAPLIB_TAB_FROM_HERE, //从这里出发
+          //BMAPLIB_TAB_SEARCH   //周边检索
+          BMAPLIB_TAB_TO_HERE  //到这里去
+        ]
+      });      
+
+      searchInfoWindow1.open(mk);
+    }
+
+    $('.adress-list').on('click','li',function  (n) {
+     
+      $(this).addClass('current').siblings().removeClass('current');
+      var ind = $(this).index();
+      //console.log(showStep1.mapPiont[ind]);
+      var msg = showStep1.mapPiont[ind].msg;
+      
+      var contentmsg = '<div class="content-msg"><i>'+ (parseInt(ind)+1) +'</i><p class="name">'+ msg.name +'</p><p class="adress">'+ msg.adress +'</p><p class="tel">'+ msg.tel +'</p></div>';
+      creatpop(contentmsg,showStep1.mapPiont[ind],ind);
+    })
 
   })
-
-
-  
-  
-
-
 
 })(jQuery);
 
 
 
 $(document).ready(function() {
-  
+  //自适应
+  function fixwindow () {
+    var getHeightAdress = $(this).height() - 60 - 51 - 102 -30;
+    var getHeightControl = $(this).height() - 60 - 51;
+
+    $('.adress-list').height(getHeightAdress);
+
+    $('.control-list').height(getHeightControl);
+  }
+
+  $(window).resize(function(){
+    fixwindow ();
+  })
+
+  fixwindow ();
+
 })
+
+//显示发送弹出
+function openTel(nb,obj) {
+  //console.log($.showStep1.mapPiont[nb].msg);  要发送的数据
+  
+  var getPos = $(obj).offset();
+  var style = {
+    'top': getPos.top,
+    'left': getPos.left
+  }
+  $('#send-msg').show().css(style);
+}
